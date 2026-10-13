@@ -61,3 +61,10 @@ def create_device(device: Device):
     new_device.pop("_id")
     return new_device
 
+@app.put("/devices/{name}")
+def update_device(name: str, device: Device):
+    result = devices.replace_one({"name": name}, device.model_dump())
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="No device called " + name)
+    return device.model_dump()
+
